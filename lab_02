@@ -1,0 +1,33 @@
+import hashlib
+
+
+def calculate_hash(filename):
+    sha256 = hashlib.sha256()
+
+    with open(filename, "rb") as file:
+        while True:
+            data = file.read(4096)
+            if not data:
+                break
+            sha256.update(data)
+
+    return sha256.hexdigest()
+
+
+filename = input("Enter filename: ")
+
+original_hash = calculate_hash(filename)
+print("\nOriginal Hash:")
+print(original_hash)
+
+input("\nModify the file if you want, then press Enter to continue...")
+
+new_hash = calculate_hash(filename)
+
+print("\nNew Hash:")
+print(new_hash)
+
+if original_hash == new_hash:
+    print("\nFile Integrity Verified. No tampering detected.")
+else:
+    print("\nWarning! File has been modified (tampering detected).")

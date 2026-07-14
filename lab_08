@@ -1,1 +1,21 @@
+import hashlib
 
+target_hash = input("Enter SHA-256 hash: ")
+wordlist = input("Enter wordlist filename: ")
+
+found = False
+
+with open(wordlist, "r") as file:
+    for word in file:
+        word = word.strip()
+
+        hashed = hashlib.sha256(word.encode()).hexdigest()
+
+        if hashed == target_hash:
+            print("\nPassword Found!")
+            print("Password:", word)
+            found = True
+            break
+
+if not found:
+    print("\nPassword not found in the wordlist.")

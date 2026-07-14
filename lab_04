@@ -1,0 +1,46 @@
+from urllib.parse import urlparse
+
+url = input("Enter URL: ")
+
+parsed = urlparse(url)
+domain = parsed.netloc.lower()
+
+score = 0
+
+# Check if HTTPS is missing
+if not url.startswith("https://"):
+    print("[-] URL does not use HTTPS.")
+    score += 1
+
+# Check for @ symbol
+if "@" in url:
+    print("[-] '@' symbol detected.")
+    score += 1
+
+# Check for IP address instead of domain
+parts = domain.split(".")
+if len(parts) == 4:
+    try:
+        for part in parts:
+            int(part)
+        print("[-] IP address used instead of domain.")
+        score += 1
+    except:
+        pass
+
+# Check for excessive hyphens
+if "-" in domain:
+    print("[-] Hyphen found in domain.")
+    score += 1
+
+# Check for unusually long URL
+if len(url) > 75:
+    print("[-] URL is unusually long.")
+    score += 1
+
+print("\nRisk Score:", score)
+
+if score >= 2:
+    print("Likely Phishing URL")
+else:
+    print("Appears Legitimate")

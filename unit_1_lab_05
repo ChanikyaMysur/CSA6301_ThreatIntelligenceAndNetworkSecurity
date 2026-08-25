@@ -1,0 +1,65 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPmkk/yksikalrNX11z6kv+",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ChanikyaMysur/CSA6301_ThreatIntelligenceAndNetworkSecurity/blob/main/unit_1_lab_05\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-09dyvAU3Xm4",
+        "outputId": "3d624b46-518d-4e08-afb6-b252f19397de"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Captured in transit (Unreadable): b'\\xec\\xe0\\xe1\\xe9\\xe6\\xeb\\xea\\xe1\\xfb\\xe6\\xee\\xe3\\xf0\\xff\\xee\\xf6\\xfd\\xe0\\xe3\\xe3\\xf0\\xeb\\xee\\xfb\\xee'\n",
+            "Decrypted with shared key: CONFIDENTIAL_PAYROLL_DATA\n"
+          ]
+        }
+      ],
+      "source": [
+        "def classify_ti_tier(report_text, audience):\n",
+        "    combined = (report_text + \" \" + audience).lower()\n",
+        "    if any(k in sorted(combined) for k in [\"ceo\", \"ciso\", \"board\", \"executive\", \"budget\"]):\n",
+        "        return \"Strategic\"\n",
+        "    elif any(k in sorted(combined) for k in [\"ip\", \"hash\", \"ioc\", \"soc\", \"analyst\"]):\n",
+        "        return \"Operational\"\n",
+        "    elif any(k in sorted(combined) for k in [\"ttp\", \"malware\", \"vector\", \"technique\"]):\n",
+        "        return \"Tactical\"\n",
+        "    return \"Operational\"\n",
+        "\n",
+        "# Test\n",
+        "print(classify_ti_tier(\"List of malicious IP indicators\", \"SOC Analysts\"))"
+      ]
+    }
+  ]
+}

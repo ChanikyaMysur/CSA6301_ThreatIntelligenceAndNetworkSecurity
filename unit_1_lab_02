@@ -1,0 +1,85 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyN8mjgnPH1ISI0OJRZ1OA0h",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ChanikyaMysur/CSA6301_ThreatIntelligenceAndNetworkSecurity/blob/main/unit_1_lab_02\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-09dyvAU3Xm4",
+        "outputId": "c524271c-04e6-4f92-da3d-089c14e1a1cf"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "{'violations_by_category': {'Confidentiality': ['Role-based access control enforced'], 'Integrity': ['Audit logs digitally signed'], 'Availability': []}, 'total_violations': 2, 'overall_status': 'NON_COMPLIANT'}\n"
+          ]
+        }
+      ],
+      "source": [
+        "def classify_cia_violations_complete(properties):\n",
+        "    \"\"\"\n",
+        "    Groups violated security properties by CIA category.\n",
+        "    Includes all three CIA categories in the returned dictionary for structured reporting.\n",
+        "    \"\"\"\n",
+        "    cia_pillars = [\"Confidentiality\", \"Integrity\", \"Availability\"]\n",
+        "    violations = {pillar: [] for pillar in cia_pillars}\n",
+        "\n",
+        "    for desc, category, status in properties:\n",
+        "        if not status and category in violations:\n",
+        "            violations[category].append(desc)\n",
+        "\n",
+        "    # Calculate overall compliance stats\n",
+        "    total_controls = len(properties)\n",
+        "    failed_controls = sum(len(desc_list) for desc_list in violations.values())\n",
+        "\n",
+        "    return {\n",
+        "        \"violations_by_category\": violations,\n",
+        "        \"total_violations\": failed_controls,\n",
+        "        \"overall_status\": \"COMPLIANT\" if failed_controls == 0 else \"NON_COMPLIANT\"\n",
+        "    }\n",
+        "\n",
+        "# Example Usage\n",
+        "properties = [\n",
+        "    (\"Data encrypted at rest\", \"Confidentiality\", True),\n",
+        "    (\"Role-based access control enforced\", \"Confidentiality\", False),\n",
+        "    (\"File checksums verified after transfer\", \"Integrity\", True),\n",
+        "    (\"Audit logs digitally signed\", \"Integrity\", False),\n",
+        "    (\"Redundant server cluster with failover\", \"Availability\", True),\n",
+        "]\n",
+        "\n",
+        "report = classify_cia_violations_complete(properties)\n",
+        "print(report)"
+      ]
+    }
+  ]
+}

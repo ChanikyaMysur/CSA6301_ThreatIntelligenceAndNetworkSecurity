@@ -1,0 +1,93 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPMRIwgP4uigIZY9vav7JrU",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ChanikyaMysur/CSA6301_ThreatIntelligenceAndNetworkSecurity/blob/main/unit_1_lab_01\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-09dyvAU3Xm4",
+        "outputId": "909478a3-3eae-446c-998e-3725c52e02bc"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "{'failed_controls': ['patches_up_to_date', 'mfa_enabled'], 'passed_controls': ['firewall_enabled', 'password_policy_enforced'], 'unmonitored_controls': ['legacy_protocol_allowed'], 'compliance_score_pct': 50.0}\n"
+          ]
+        }
+      ],
+      "source": [
+        "def evaluate_security_baseline_detailed(config, baseline):\n",
+        "    \"\"\"\n",
+        "    Evaluates current configuration against baseline.\n",
+        "    Returns a breakdown of failed, passed, and unmonitored controls.\n",
+        "    \"\"\"\n",
+        "    failures = []\n",
+        "    passed = []\n",
+        "\n",
+        "    for control, required in baseline.items():\n",
+        "        if required and not config.get(control, False):\n",
+        "            failures.append(control)\n",
+        "        else:\n",
+        "            passed.append(control)\n",
+        "\n",
+        "    unmonitored = [ctrl for ctrl in config if ctrl not in baseline]\n",
+        "    compliance_score = (len(passed) / len(baseline)) * 100 if baseline else 100.0\n",
+        "\n",
+        "    return {\n",
+        "        \"failed_controls\": failures,\n",
+        "        \"passed_controls\": passed,\n",
+        "        \"unmonitored_controls\": unmonitored,\n",
+        "        \"compliance_score_pct\": round(compliance_score, 2)\n",
+        "    }\n",
+        "\n",
+        "# Example Usage\n",
+        "baseline = {\n",
+        "    \"firewall_enabled\": True,\n",
+        "    \"password_policy_enforced\": True,\n",
+        "    \"patches_up_to_date\": True,\n",
+        "    \"mfa_enabled\": True,\n",
+        "}\n",
+        "\n",
+        "config = {\n",
+        "    \"firewall_enabled\": True,\n",
+        "    \"password_policy_enforced\": True,\n",
+        "    \"patches_up_to_date\": False,\n",
+        "    \"legacy_protocol_allowed\": True # Unmonitored extra control\n",
+        "}\n",
+        "\n",
+        "report = evaluate_security_baseline_detailed(config, baseline)\n",
+        "print(report)"
+      ]
+    }
+  ]
+}
